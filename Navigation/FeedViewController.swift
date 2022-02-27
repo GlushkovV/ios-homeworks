@@ -30,10 +30,13 @@ class FeedViewController: UIViewController {
     @objc func buttonClicked() {
         let postViewController = PostViewController()
         navigationController?.pushViewController(postViewController, animated: true)
-    }
-    
-}
-
-struct Post {
-    let title:String = "Сообщение"
+        
+        struct Post {
+            let title:String = "Сообщение"
+        }
+        
+        let post = Post()
+        postViewController.title = post.title
+        }
+        
 }

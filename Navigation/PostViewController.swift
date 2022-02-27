@@ -13,8 +13,6 @@ class PostViewController: UIViewController {
         super.viewDidLoad()
         self.navigationController?.navigationBar.prefersLargeTitles = true
         view.backgroundColor = .systemGray3
-        let post = Post()
-        title = post.title
         let infoButton = UIBarButtonItem(image: UIImage(systemName: "info.circle"), style: .plain, target: self, action: #selector(buttonInfoClicked))
         navigationItem.rightBarButtonItem = infoButton
         navigationItem.backButtonTitle = "Назад"

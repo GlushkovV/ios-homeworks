@@ -34,7 +34,6 @@ class InfoViewController: UIViewController {
         alert.addAction(okButton)
         alert.addAction(cancelButton)
         present(alert, animated: true, completion: nil)
-        print("Alert work")
     }
     
 }
