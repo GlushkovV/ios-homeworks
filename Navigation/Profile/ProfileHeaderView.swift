@@ -143,7 +143,7 @@ final class ProfileHeaderView: UIView {
                 self.statusTextField.text = .none
             }
             self.topShowStatusButtonConstraintOff = self.showStatusButton.topAnchor.constraint(equalTo: self.photoImageView.bottomAnchor, constant: 16)
-
+            self.statusTextField.endEditing(true)
             NSLayoutConstraint.activate([self.topShowStatusButtonConstraintOff].compactMap({ $0 }))
         }
         self.delegate?.didTapShowStatusButton(textFieldIsVisible: self.statusTextField.isHidden) { [weak self] in
