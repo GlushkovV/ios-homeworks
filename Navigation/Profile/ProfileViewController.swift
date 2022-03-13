@@ -36,6 +36,7 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         self.navigationController?.navigationBar.prefersLargeTitles = false
         title = "Профиль"
+        //self.navigationController?.navigationBar.isHidden = true
         self.setupView()
         
     }

@@ -28,7 +28,7 @@ class InfoViewController: UIViewController {
     }
     
     @objc func alertClicked() {
-        let alert = UIAlertController(title: "Заголовок", message: "Текст некого сообщения", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Заголовок", message: "Текст некого сообщения", preferredStyle: .alert /* .actionSheet */ )
         let okButton = UIAlertAction(title: "Ок", style: .default, handler: nil)
         let cancelButton = UIAlertAction(title: "Закрыть", style: .cancel, handler: nil)
         alert.addAction(okButton)
