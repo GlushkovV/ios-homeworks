@@ -7,68 +7,91 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController {
     
-    lazy var profileHeaderView: ProfileHeaderView = {
-        let view = ProfileHeaderView(frame: .zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .lightGray
-        view.delegate = self
-        return view
-    }()
-
-    private lazy var newButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Новая кнопка", for: .normal)
-        button.backgroundColor = .systemBlue
-        button.layer.cornerRadius = 4
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOffset = CGSize(width: 4, height: 4)
-        button.layer.shadowRadius = 4
-        button.layer.shadowOpacity = 0.7
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    private lazy var profileHeaderView = ProfileHeaderView()
+    
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .grouped)
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 44
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "DefaultCell")
+        tableView.register(PostTableViewCell.self, forCellReuseIdentifier: "ArticleCell")
+        tableView.backgroundColor = .systemGray6
+        tableView.layer.borderColor = UIColor.lightGray.cgColor
+        tableView.layer.borderWidth = 0.5
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    } ()
     
     private var heightConstraint: NSLayoutConstraint?
     
+    private var dataSource: [Post] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.prefersLargeTitles = false
-        title = "Профиль"
-        //self.navigationController?.navigationBar.isHidden = true
         self.setupView()
-        
+        self.addDataSource()
+        self.hidingKeyboard()
+    }
+    
+    private func hidingKeyboard() {
+        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
+        view.addGestureRecognizer(tap)
     }
     
     private func setupView() {
-        self.view.backgroundColor = .systemBackground
-        self.view.addSubview(self.profileHeaderView)
-        self.view.addSubview(self.newButton)
-        let topConstraint = self.profileHeaderView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor)
-        let leadingConstraint = self.profileHeaderView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor)
-        let trailingConstraint = self.profileHeaderView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
-        self.heightConstraint = self.profileHeaderView.heightAnchor.constraint(equalToConstant: 245)
-        let bottomNewButtonConstraint = self.newButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
-        let leadingNewButtonConstraint = self.newButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 16)
-        let trailingNewButtonConstraint = self.newButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -16)
-        let heightNewButtonConstraint = self.newButton.heightAnchor.constraint(equalToConstant: 50)
+        view.backgroundColor = .systemGray6
+        view.addSubview(self.tableView)
         NSLayoutConstraint.activate([
-            topConstraint, leadingConstraint, trailingConstraint, self.heightConstraint,
-            bottomNewButtonConstraint, leadingNewButtonConstraint, trailingNewButtonConstraint,
-            heightNewButtonConstraint
-        ].compactMap({ $0 }))
+            tableView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+            tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        ])
     }
+    
+    private func addDataSource() {
+        self.dataSource.append(.init(author: "Андрей Загородний", description: "Тогда и сейчас. Проблемы разные, решения не меняются...", image: "post1", likes: 8, views: 16))
+        self.dataSource.append(.init(author: "Лев Красильников", description: "Крепитесь люди, скоро лето...", image: "post2", likes: 2, views: 4))
+        self.dataSource.append(.init(author: "Сергей Судаков", description: "Коты замышляют...", image: "post3", likes: 4, views: 8))
+        self.dataSource.append(.init(author: "Алексей Кузнецов", description: "Крутые тапки за смешные бабки!", image: "post4", likes: 16, views: 32))
+    }
+    
 }
 
-extension ProfileViewController: ProfileHeaderViewProtocol {
+extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.dataSource.count
+    }
     
-    func didTapShowStatusButton(textFieldIsVisible: Bool, completion: @escaping () -> Void) {
-        self.heightConstraint?.constant = textFieldIsVisible ? 300 : 245
-        UIView.animate(withDuration: 0.3, delay: 0.1) {
-            self.view.layoutIfNeeded()
-        } completion: { _ in
-            completion()
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleCell", for: indexPath) as? PostTableViewCell else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell", for: indexPath)
+            return cell
         }
+        let article = self.dataSource[indexPath.row]
+        let viewModel = PostTableViewCell.ViewModel(author: article.author,
+                                                   image: article.image,
+                                                   description: article.description,
+                                                   likes: article.likes,
+                                                   views: article.views)
+        cell.setup(with: viewModel)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        var headerView = UIView()
+        if section == 0 {
+            headerView = ProfileHeaderView()
+        }
+        return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 250
     }
 }

@@ -100,6 +100,23 @@ final class LogInViewController: UIViewController {
         self.setupConstraints()
         self.hidingKeyboard()
         self.navigationController?.navigationBar.isHidden = true
+        let notificationCenterKeyboard = NotificationCenter.default
+        notificationCenterKeyboard.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
+        notificationCenterKeyboard.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+
+    }
+    
+    @objc private func adjustForKeyboard(notification: NSNotification) {
+        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let screenHeight = UIScreen.main.bounds.height
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            let difference = keyboardHeight - ((screenHeight / 2) - 130)
+            if ((screenHeight / 2) - 120) <= keyboardHeight {
+                let contentOffset: CGPoint = notification.name == UIResponder.keyboardWillHideNotification ? .zero : CGPoint(x: 0, y:  difference)
+                self.scrollView.setContentOffset(contentOffset, animated: true)
+            }
+        }
     }
     
     private func hidingKeyboard() {
@@ -108,23 +125,27 @@ final class LogInViewController: UIViewController {
     }
     
     private func setupConstraints () {
-        let topConstraints = self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor)
+        let topConstraints = self.scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor)
         let leftConstraints = self.scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor)
         let rightConstraints = self.scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor)
-        let bottomConstraints = self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        let bottomConstraints = self.scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
         
         let contentViewTopConstraints = self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor)
         let contentViewBottomConstraints = self.contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor)
+        let contentViewLeadingConstraints = self.contentView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor)
+        let contentViewTrailingConstraints = self.contentView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor)
         let contentViewCenterXConstraints = self.contentView.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor)
+        let contentViewCenterYConstraints = self.contentView.centerYAnchor.constraint(equalTo: self.scrollView.centerYAnchor)
         let contentViewWidthConstraints = self.contentView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor)
         let contentViewHeightConstraints = self.contentView.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor)
         
-        let logoImageViewTopConstraints = self.logoImageView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 120)
+        let logoImageViewBottomConstraints = self.logoImageView.bottomAnchor.constraint(equalTo: self.loginPasswordStackView.topAnchor, constant: -120)
         let logoImageViewCenterXConstraints = self.logoImageView.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor)
-        let logoImageViewWidthConstraints = self.logoImageView.widthAnchor.constraint(equalToConstant: 100)
         let logoImageViewHeightConstraints = self.logoImageView.heightAnchor.constraint(equalToConstant: 100)
+        let logoImageViewWidthConstraints = self.logoImageView.widthAnchor.constraint(equalTo: logoImageView.heightAnchor, multiplier: 1.0)
+        //let logoImageViewWidthConstraints = self.logoImageView.widthAnchor.constraint(equalToConstant: 100)
         
-        let loginPasswordStackViewTopConstraints = self.loginPasswordStackView.topAnchor.constraint(equalTo: self.logoImageView.bottomAnchor, constant: 120)
+        let loginPasswordStackViewCenterYConstraints = self.loginPasswordStackView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor)
         let loginPasswordStackViewLeftConstraints = self.loginPasswordStackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 16)
         let loginPasswordStackViewRightConstraints = self.loginPasswordStackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -16)
         let loginPasswordStackViewHeightConstraints = self.loginPasswordStackView.heightAnchor.constraint(equalToConstant: 100)
@@ -136,17 +157,19 @@ final class LogInViewController: UIViewController {
         
         NSLayoutConstraint.activate([
         topConstraints, leftConstraints, rightConstraints, bottomConstraints,
-        contentViewTopConstraints, contentViewBottomConstraints, contentViewCenterXConstraints, contentViewWidthConstraints, contentViewHeightConstraints,
-        logoImageViewTopConstraints, logoImageViewCenterXConstraints, logoImageViewWidthConstraints, logoImageViewHeightConstraints,
-        loginPasswordStackViewTopConstraints, loginPasswordStackViewLeftConstraints, loginPasswordStackViewRightConstraints, loginPasswordStackViewHeightConstraints,
+        contentViewTopConstraints, contentViewBottomConstraints, contentViewLeadingConstraints, contentViewTrailingConstraints, contentViewCenterXConstraints, contentViewCenterYConstraints,contentViewWidthConstraints, contentViewHeightConstraints,
+        logoImageViewBottomConstraints, logoImageViewCenterXConstraints, logoImageViewWidthConstraints, logoImageViewHeightConstraints,
+        loginPasswordStackViewLeftConstraints, loginPasswordStackViewRightConstraints, loginPasswordStackViewHeightConstraints, loginPasswordStackViewCenterYConstraints,
         loginInButtonTopConstraints, loginInButtonLeftConstraints, loginInButtonRightConstraints, loginInButtonHeightConstraints
         ])
     }
     
     @objc func buttonClicked() {
         let profileViewController = ProfileViewController()
-        navigationController?.pushViewController(profileViewController, animated: true)
-        //self.navigationController?.pushViewController(ProfileViewController(), animated: true)
+        if self.loginTextField.text != "" && self.passwordTextField.text != "" {
+            navigationController?.pushViewController(profileViewController, animated: true)
+            //self.navigationController?.pushViewController(ProfileViewController(), animated: true)
+        }
     }
 
 }
