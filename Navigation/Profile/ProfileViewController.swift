@@ -9,8 +9,6 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     
-    private lazy var profileHeaderView = ProfileHeaderView()
-    
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.rowHeight = UITableView.automaticDimension
@@ -18,6 +16,7 @@ final class ProfileViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "DefaultCell")
+        tableView.register(PhotosTableViewCell.self, forCellReuseIdentifier: "PhotosTableViewCell")
         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: "ArticleCell")
         tableView.backgroundColor = .systemGray6
         tableView.layer.borderColor = UIColor.lightGray.cgColor
@@ -26,15 +25,13 @@ final class ProfileViewController: UIViewController {
         return tableView
     } ()
     
-    private var heightConstraint: NSLayoutConstraint?
-    
     private var dataSource: [Post] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
         self.addDataSource()
-        self.hidingKeyboard()
+        //self.hidingKeyboard()
     }
     
     private func hidingKeyboard() {
@@ -42,8 +39,14 @@ final class ProfileViewController: UIViewController {
         view.addGestureRecognizer(tap)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+        navigationItem.backButtonTitle = "Назад"
+    }
+    
     private func setupView() {
-        view.backgroundColor = .systemGray6
+        view.backgroundColor = .systemBackground //.systemGray6
         view.addSubview(self.tableView)
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: self.view.topAnchor),
@@ -52,7 +55,7 @@ final class ProfileViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
         ])
     }
-    
+
     private func addDataSource() {
         self.dataSource.append(.init(author: "Андрей Загородний", description: "Тогда и сейчас. Проблемы разные, решения не меняются...", image: "post1", likes: 8, views: 16))
         self.dataSource.append(.init(author: "Лев Красильников", description: "Крепитесь люди, скоро лето...", image: "post2", likes: 2, views: 4))
@@ -65,22 +68,27 @@ final class ProfileViewController: UIViewController {
 extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.dataSource.count
+        return self.dataSource.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleCell", for: indexPath) as? PostTableViewCell else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell", for: indexPath)
+        if indexPath.row == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "PhotosTableViewCell", for: indexPath)
+            return cell
+        } else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleCell", for: indexPath) as? PostTableViewCell else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell", for: indexPath)
+                return cell
+            }
+            let article = self.dataSource[indexPath.row - 1]
+            let viewModel = PostTableViewCell.ViewModel(author: article.author,
+                                                        image: article.image,
+                                                        description: article.description,
+                                                        likes: article.likes,
+                                                        views: article.views)
+            cell.setup(with: viewModel)
             return cell
         }
-        let article = self.dataSource[indexPath.row]
-        let viewModel = PostTableViewCell.ViewModel(author: article.author,
-                                                   image: article.image,
-                                                   description: article.description,
-                                                   likes: article.likes,
-                                                   views: article.views)
-        cell.setup(with: viewModel)
-        return cell
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -94,4 +102,11 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 250
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 0 {
+            self.navigationController?.pushViewController(PhotosViewController(), animated: true)
+        } else { return }
+    }
+    
 }
