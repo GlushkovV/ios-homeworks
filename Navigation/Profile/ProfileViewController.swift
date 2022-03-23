@@ -8,9 +8,7 @@
 import UIKit
 
 final class ProfileViewController: UIViewController {
-    
-    private lazy var profileHeaderView = ProfileHeaderView()
-    
+
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.rowHeight = UITableView.automaticDimension
@@ -25,9 +23,7 @@ final class ProfileViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     } ()
-    
-    private var heightConstraint: NSLayoutConstraint?
-    
+
     private var dataSource: [Post] = []
     
     override func viewDidLoad() {
@@ -92,6 +88,6 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 250
+        return 290
     }
 }
