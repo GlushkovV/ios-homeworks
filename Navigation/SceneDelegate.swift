@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window = UIWindow(windowScene: windowScene)
         self.window?.rootViewController = MainTabBarController()
         self.window?.makeKeyAndVisible()
-        //self.window?.overrideUserInterfaceStyle = .light
+        self.window?.overrideUserInterfaceStyle = .light
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

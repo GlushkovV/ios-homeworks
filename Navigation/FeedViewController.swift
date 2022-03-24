@@ -25,21 +25,21 @@ class FeedViewController: UIViewController {
     
     private lazy var oneButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Первая кнопка", for: .normal)
-        button.backgroundColor = .systemBlue
+        button.setTitle("Кнопка на анимацию", for: .normal)
+        button.backgroundColor = .systemRed
         button.layer.cornerRadius = 4
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowOffset = CGSize(width: 4, height: 4)
         button.layer.shadowRadius = 4
         button.layer.shadowOpacity = 0.7
-        button.addTarget(self, action: #selector(self.buttonClicked), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.buttonOneClicked), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     private lazy var twoButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Вторая кнопка", for: .normal)
+        button.setTitle("Кнопка на алерт", for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 4
         button.layer.shadowColor = UIColor.black.cgColor
@@ -87,6 +87,10 @@ class FeedViewController: UIViewController {
         navigationController?.pushViewController(postViewController, animated: true)
         let post = Post()
         postViewController.title = post.title
+        }
+    
+    @objc func buttonOneClicked() {
+        navigationController?.pushViewController(AnimationsViewController(), animated: true)
         }
         
 }

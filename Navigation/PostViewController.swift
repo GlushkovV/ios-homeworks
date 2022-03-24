@@ -20,8 +20,8 @@ class PostViewController: UIViewController {
         
     @objc func buttonInfoClicked() {
         let infoViewController = InfoViewController()
-        navigationController?.pushViewController(infoViewController, animated: true)
-        //navigationController?.present(infoViewController, animated: true, completion: nil)
+        //navigationController?.pushViewController(infoViewController, animated: true)
+        navigationController?.present(infoViewController, animated: true, completion: nil)
     }
 
 }
