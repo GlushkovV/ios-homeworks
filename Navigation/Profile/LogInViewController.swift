@@ -87,6 +87,17 @@ final class LogInViewController: UIViewController {
         return button
     } ()
     
+    private lazy var invalidLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Не корректный логин или пароль"
+        label.textColor = .systemGray
+        label.font = .systemFont(ofSize: 14)
+        label.isHidden = true
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    } ()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -95,6 +106,7 @@ final class LogInViewController: UIViewController {
         contentView.addSubview(logoImageView)
         contentView.addSubview(loginInButton)
         contentView.addSubview(loginPasswordStackView)
+        contentView.addSubview(invalidLabel)
         loginPasswordStackView.addArrangedSubview(loginTextField)
         loginPasswordStackView.addArrangedSubview(passwordTextField)
         self.setupConstraints()
@@ -155,26 +167,95 @@ final class LogInViewController: UIViewController {
         let loginInButtonRightConstraints = self.loginInButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -16)
         let loginInButtonHeightConstraints = self.loginInButton.heightAnchor.constraint(equalToConstant: 50)
         
+        let invalidLabelTopConstraints = self.invalidLabel.topAnchor.constraint(equalTo: self.loginInButton.bottomAnchor, constant: 4)
+        let invalidLabelLeadingAnchor = self.invalidLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 16)
+        let invalidLabelTrailingAnchor = self.invalidLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -16)
+        
         NSLayoutConstraint.activate([
         topConstraints, leftConstraints, rightConstraints, bottomConstraints,
         contentViewTopConstraints, contentViewBottomConstraints, contentViewLeadingConstraints, contentViewTrailingConstraints, contentViewCenterXConstraints, contentViewCenterYConstraints,contentViewWidthConstraints, contentViewHeightConstraints,
         logoImageViewBottomConstraints, logoImageViewCenterXConstraints, logoImageViewWidthConstraints, logoImageViewHeightConstraints,
         loginPasswordStackViewLeftConstraints, loginPasswordStackViewRightConstraints, loginPasswordStackViewHeightConstraints, loginPasswordStackViewCenterYConstraints,
-        loginInButtonTopConstraints, loginInButtonLeftConstraints, loginInButtonRightConstraints, loginInButtonHeightConstraints
+        loginInButtonTopConstraints, loginInButtonLeftConstraints, loginInButtonRightConstraints, loginInButtonHeightConstraints,
+        invalidLabelTopConstraints, invalidLabelLeadingAnchor, invalidLabelTrailingAnchor
         ])
     }
-    
+    /*
     @objc func buttonClicked() {
         let profileViewController = ProfileViewController()
         if self.loginTextField.text != "" && self.passwordTextField.text != "" {
             navigationController?.pushViewController(profileViewController, animated: true)
             //self.navigationController?.pushViewController(ProfileViewController(), animated: true)
         }
+    }*/
+    
+    @objc func buttonClicked() {
+        if self.loginTextField.text == AuthorizationData().defaultLogin && self.passwordTextField.text == AuthorizationData().defaultPassword {
+            invalidLabel.isHidden = true
+            self.navigationController?.pushViewController(ProfileViewController(), animated: true)
+        } else {
+            authorizationEmptyError(textField: loginTextField)
+            authorizationEmptyError(textField: passwordTextField)
+            authorizationError()
+        }
+    }
+    
+    private func authorizationEmptyError(textField: UITextField) {
+        if textField.text == "" {
+            textField.shake()
+        }
+    }
+    
+    private func authorizationError() {
+        guard let login = loginTextField.text else { return }
+        if isValidEmail(login) {
+            guard let password = passwordTextField.text else { return }
+            if password.count > 0 && password.count < 8 {
+                invalidLabel.text = AuthorizationData().invalidPassword
+                invalidLabel.isHidden = false
+            } else {
+                if password.count >= 8 {
+                    invalidLabel.text = AuthorizationData().invalidLogPass
+                    invalidLabel.isHidden = false
+                    alertInvalidAuthorization()
+                } else {
+                invalidLabel.isHidden = true
+                }
+            }
+        } else {
+            if login != "" {
+                invalidLabel.text = AuthorizationData().invalidLogin
+                invalidLabel.isHidden = false
+            } else {
+                invalidLabel.isHidden = true
+            }
+        }
+        
+    }
+    
+    func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
+    }
+
+    func alertInvalidAuthorization() {
+        let alert = UIAlertController(title: "Тесовые данные:", message: "Login: \(AuthorizationData().defaultLogin) \nPassword: \(AuthorizationData().defaultPassword)", preferredStyle: .alert)
+        let okButton = UIAlertAction(title: "Заполнить", style: .default) { action in
+                self.loginTextField.text = AuthorizationData().defaultLogin
+                self.passwordTextField.text = AuthorizationData().defaultPassword
+                self.invalidLabel.isHidden = true
+            }
+        let cancelButton = UIAlertAction(title: "Закрыть", style: .cancel, handler: nil)
+        alert.addAction(okButton)
+        alert.addAction(cancelButton)
+        present(alert, animated: true, completion: nil)
     }
 
 }
 
 extension UIColor {
+    
     public convenience init?(hex: String) {
         let r, g, b, a: CGFloat
 
@@ -199,5 +280,19 @@ extension UIColor {
         }
 
         return nil
+    }
+}
+
+public extension UIView {
+
+    func shake(count : Float = 4,for duration : TimeInterval = 0.3,withTranslation translation : Float = 4) {
+
+        let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
+        animation.repeatCount = count
+        animation.duration = duration/TimeInterval(animation.repeatCount)
+        animation.autoreverses = true
+        animation.values = [translation, -translation]
+        layer.add(animation, forKey: "shake")
     }
 }

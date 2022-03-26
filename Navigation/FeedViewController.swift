@@ -26,7 +26,7 @@ class FeedViewController: UIViewController {
     private lazy var oneButton: UIButton = {
         let button = UIButton()
         button.setTitle("Кнопка на анимацию", for: .normal)
-        button.backgroundColor = .systemRed
+        button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 4
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowOffset = CGSize(width: 4, height: 4)

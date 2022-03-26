@@ -49,7 +49,7 @@ final class AnimationsViewController: UIViewController {
         button.alpha = 0
         button.clipsToBounds = true
         button.setBackgroundImage(UIImage(systemName: "xmark.circle.fill")?.withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
-        button.addTarget(self, action: #selector(self.didTapSetStatusButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.didTapCloseButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     } ()
@@ -141,7 +141,7 @@ final class AnimationsViewController: UIViewController {
         }
     }
     
-    @objc private func didTapSetStatusButton() {
+    @objc private func didTapCloseButton() {
         self.avatarViewCenterXConstraint?.constant = -1 * (screenWidth * 0.5 - 91)
         self.avatarViewCenterYConstraint?.constant = -1 * (screenHeight * 0.5 - 166)
         self.avatarViewHeightConstraint?.constant = 150
@@ -151,10 +151,6 @@ final class AnimationsViewController: UIViewController {
             self.avatarView.layer.cornerRadius = 75
             self.alphaView.alpha = 0
             self.view.layoutIfNeeded()
-        } completion: { _ in
-        }
-        
-        UIView.animate(withDuration: 0.3, delay: 0.5) {
             self.closeButton.alpha = 0
         } completion: { _ in
             self.closeButton.isHidden = false
