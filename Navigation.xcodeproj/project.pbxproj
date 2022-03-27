@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		840FA1CF27F0C670001D7A1A /* DetailPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840FA1CE27F0C670001D7A1A /* DetailPhotoView.swift */; };
 		8427E0F127E7738F004F9111 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8427E0F027E7738F004F9111 /* PostTableViewCell.swift */; };
 		845F1EAF27C7B580003B437B /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F1EAE27C7B580003B437B /* FeedViewController.swift */; };
 		845F1EB127C7B5A2003B437B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F1EB027C7B5A2003B437B /* ProfileViewController.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		840FA1CE27F0C670001D7A1A /* DetailPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPhotoView.swift; sourceTree = "<group>"; };
 		8427E0F027E7738F004F9111 /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		845F1EAE27C7B580003B437B /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		845F1EB027C7B5A2003B437B /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 				845F1EB027C7B5A2003B437B /* ProfileViewController.swift */,
 				8471830927DDD56D003C1090 /* LogInViewController.swift */,
 				8427E0F027E7738F004F9111 /* PostTableViewCell.swift */,
+				840FA1CE27F0C670001D7A1A /* DetailPhotoView.swift */,
 				84E80FC127EB9B8200C2EE3E /* PhotosTableViewCell.swift */,
 				84E80FC327EB9B8A00C2EE3E /* PhotosViewController.swift */,
 				84E80FC527EB9B9100C2EE3E /* PhotosCollectionViewCell.swift */,
@@ -200,6 +203,7 @@
 				845F1EAF27C7B580003B437B /* FeedViewController.swift in Sources */,
 				845F1EB927CA896B003B437B /* InfoViewController.swift in Sources */,
 				845F1EB527C7B63B003B437B /* MainTabBarController.swift in Sources */,
+				840FA1CF27F0C670001D7A1A /* DetailPhotoView.swift in Sources */,
 				8496F02A27EF429D00B0E370 /* Authorization.swift in Sources */,
 				845F1EB127C7B5A2003B437B /* ProfileViewController.swift in Sources */,
 				84E80FC227EB9B8200C2EE3E /* PhotosTableViewCell.swift in Sources */,
