@@ -59,15 +59,14 @@ final class FeedViewController: UIViewController {
         view.addSubview(stackView)
         stackView.addArrangedSubview(oneButton)
         stackView.addArrangedSubview(twoButton)
-        let centerYStackViewConstraint = self.stackView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
-        let leadingStackViewConstraint = self.stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10)
-        let trailingStackViewConstraint = self.stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10)
-        let heightStackViewConstraint = self.stackView.heightAnchor.constraint(equalToConstant: 110)
         NSLayoutConstraint.activate([
-            centerYStackViewConstraint, leadingStackViewConstraint, trailingStackViewConstraint,
-            heightStackViewConstraint
+            stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            stackView.heightAnchor.constraint(equalToConstant: 110)
         ])
     }
+    
         /*
         let button = UIButton(frame: CGRect(x: 130, y: 770, width: 150, height: 40))
         button.backgroundColor = .systemBlue

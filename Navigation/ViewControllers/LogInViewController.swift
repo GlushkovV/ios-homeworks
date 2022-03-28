@@ -137,49 +137,43 @@ final class LogInViewController: UIViewController {
     }
     
     private func setupConstraints () {
-        let topConstraints = self.scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor)
-        let leftConstraints = self.scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor)
-        let rightConstraints = self.scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor)
-        let bottomConstraints = self.scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
-        
-        let contentViewTopConstraints = self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor)
-        let contentViewBottomConstraints = self.contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor)
-        let contentViewLeadingConstraints = self.contentView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor)
-        let contentViewTrailingConstraints = self.contentView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor)
-        let contentViewCenterXConstraints = self.contentView.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor)
-        let contentViewCenterYConstraints = self.contentView.centerYAnchor.constraint(equalTo: self.scrollView.centerYAnchor)
-        let contentViewWidthConstraints = self.contentView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor)
-        let contentViewHeightConstraints = self.contentView.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor)
-        
-        let logoImageViewBottomConstraints = self.logoImageView.bottomAnchor.constraint(equalTo: self.loginPasswordStackView.topAnchor, constant: -120)
-        let logoImageViewCenterXConstraints = self.logoImageView.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor)
-        let logoImageViewHeightConstraints = self.logoImageView.heightAnchor.constraint(equalToConstant: 100)
-        let logoImageViewWidthConstraints = self.logoImageView.widthAnchor.constraint(equalTo: logoImageView.heightAnchor, multiplier: 1.0)
-        //let logoImageViewWidthConstraints = self.logoImageView.widthAnchor.constraint(equalToConstant: 100)
-        
-        let loginPasswordStackViewCenterYConstraints = self.loginPasswordStackView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor)
-        let loginPasswordStackViewLeftConstraints = self.loginPasswordStackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 16)
-        let loginPasswordStackViewRightConstraints = self.loginPasswordStackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -16)
-        let loginPasswordStackViewHeightConstraints = self.loginPasswordStackView.heightAnchor.constraint(equalToConstant: 100)
-        
-        let loginInButtonTopConstraints = self.loginInButton.topAnchor.constraint(equalTo: self.loginPasswordStackView.bottomAnchor, constant: 16)
-        let loginInButtonLeftConstraints = self.loginInButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 16)
-        let loginInButtonRightConstraints = self.loginInButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -16)
-        let loginInButtonHeightConstraints = self.loginInButton.heightAnchor.constraint(equalToConstant: 50)
-        
-        let invalidLabelTopConstraints = self.invalidLabel.topAnchor.constraint(equalTo: self.loginInButton.bottomAnchor, constant: 4)
-        let invalidLabelLeadingAnchor = self.invalidLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 16)
-        let invalidLabelTrailingAnchor = self.invalidLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -16)
-        
         NSLayoutConstraint.activate([
-        topConstraints, leftConstraints, rightConstraints, bottomConstraints,
-        contentViewTopConstraints, contentViewBottomConstraints, contentViewLeadingConstraints, contentViewTrailingConstraints, contentViewCenterXConstraints, contentViewCenterYConstraints,contentViewWidthConstraints, contentViewHeightConstraints,
-        logoImageViewBottomConstraints, logoImageViewCenterXConstraints, logoImageViewWidthConstraints, logoImageViewHeightConstraints,
-        loginPasswordStackViewLeftConstraints, loginPasswordStackViewRightConstraints, loginPasswordStackViewHeightConstraints, loginPasswordStackViewCenterYConstraints,
-        loginInButtonTopConstraints, loginInButtonLeftConstraints, loginInButtonRightConstraints, loginInButtonHeightConstraints,
-        invalidLabelTopConstraints, invalidLabelLeadingAnchor, invalidLabelTrailingAnchor
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            scrollView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            contentView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
+            
+            logoImageView.bottomAnchor.constraint(equalTo: loginPasswordStackView.topAnchor, constant: -120),
+            logoImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            logoImageView.heightAnchor.constraint(equalToConstant: 100),
+            logoImageView.widthAnchor.constraint(equalTo: logoImageView.heightAnchor, multiplier: 1.0),
+            //logoImageView.widthAnchor.constraint(equalToConstant: 100),
+            
+            loginPasswordStackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            loginPasswordStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            loginPasswordStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            loginPasswordStackView.heightAnchor.constraint(equalToConstant: 100),
+            
+            loginInButton.topAnchor.constraint(equalTo: loginPasswordStackView.bottomAnchor, constant: 16),
+            loginInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            loginInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            loginInButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            invalidLabel.topAnchor.constraint(equalTo: loginInButton.bottomAnchor, constant: 4),
+            invalidLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            invalidLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
         ])
     }
+         
     /*
     @objc func buttonClicked() {
         let profileViewController = ProfileViewController()
