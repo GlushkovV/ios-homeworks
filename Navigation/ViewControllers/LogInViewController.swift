@@ -115,6 +115,7 @@ final class LogInViewController: UIViewController {
         let notificationCenterKeyboard = NotificationCenter.default
         notificationCenterKeyboard.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
         notificationCenterKeyboard.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        alertInvalidAuthorization()
 
     }
     
