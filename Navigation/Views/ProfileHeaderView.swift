@@ -9,12 +9,13 @@ import UIKit
 
 final class ProfileHeaderView: UIView {
     
-    private lazy var avatarImageView: UIImageView = {
+    lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Photo"))
         imageView.layer.cornerRadius = 75
         imageView.clipsToBounds = true
         imageView.layer.borderWidth = 3
         imageView.layer.borderColor = UIColor.white.cgColor
+        imageView.isUserInteractionEnabled = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -71,6 +72,7 @@ final class ProfileHeaderView: UIView {
         textField.clearButtonMode = .always
         textField.alpha = 0
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.isHidden = true
         return textField
     }()
  
@@ -125,7 +127,7 @@ final class ProfileHeaderView: UIView {
             self.statusTextField.alpha = 1
             NSLayoutConstraint.deactivate([self.topSetStatusButtonOff].compactMap({ $0 }))
             
-            self.topSetStatusButtonOn = self.setStatusButton.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 70)
+            self.topSetStatusButtonOn = self.setStatusButton.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 50)
             
             NSLayoutConstraint.activate([
                 statusTextField.topAnchor.constraint(equalTo: statusLabel.bottomAnchor, constant: 27),

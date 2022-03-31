@@ -11,8 +11,8 @@ final class ProfileViewController: UIViewController {
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 44
+        //tableView.rowHeight = UITableView.automaticDimension
+        //tableView.estimatedRowHeight = 44
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "DefaultCell")
@@ -27,11 +27,34 @@ final class ProfileViewController: UIViewController {
 
     private var dataSource: [Post] = []
     
+    private let tapGestureRecognizer = UITapGestureRecognizer()
+    
+    private let profileHeaderView = ProfileHeaderView()
+    
+    private let avatarView: AvatarView = {
+        let view = AvatarView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
         self.addDataSource()
         //self.hidingKeyboard()
+        self.setupGesture()
+    }
+    
+    private func setupGesture() {
+        tapGestureRecognizer.addTarget(self, action: #selector(handleTapGesture(_ :)))
+        profileHeaderView.avatarImageView.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc func handleTapGesture(_ gestureRecognizer: UITapGestureRecognizer){
+        guard self.tapGestureRecognizer === gestureRecognizer else { return }
+        UIView.animate(withDuration: 0.5) {
+            self.avatarView.alpha = 1
+        }
     }
     
     private func hidingKeyboard() {
@@ -47,12 +70,18 @@ final class ProfileViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = .systemGray6
-        view.addSubview(self.tableView)
+        view.addSubview(tableView)
+        view.addSubview(avatarView)
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
-            tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
-            tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            avatarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            avatarView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            avatarView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            avatarView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     
@@ -92,15 +121,16 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        var headerView = UIView()
+        /* var headerView = UIView()
         if section == 0 {
             headerView = ProfileHeaderView()
         }
-        return headerView
+        return headerView */
+        return profileHeaderView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 290
+        return 270
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
