@@ -145,6 +145,10 @@ final class ProfileHeaderView: UIView {
                 self.statusLabel.text = self.statusTextField.text
                 self.statusTextField.text = .none
                 self.statusLabel.textColor = .black
+            } else {
+                self.statusLabel.shake()
+                self.statusLabel.textColor = .gray
+                self.statusLabel.text = "Статус"
             }
             self.topSetStatusButtonOff = self.setStatusButton.topAnchor.constraint(equalTo: self.avatarImageView.bottomAnchor, constant: 16)
             NSLayoutConstraint.activate([self.topSetStatusButtonOff].compactMap({ $0 }))

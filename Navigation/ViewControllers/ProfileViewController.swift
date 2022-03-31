@@ -139,4 +139,17 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         } else { return }
     }
     
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        if indexPath.row != 0 {
+            let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") {
+                (contextualAction, view, boolValue) in
+                self.dataSource.remove(at: indexPath.row - 1)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+            }
+            let swipeActions = UISwipeActionsConfiguration(actions: [deleteAction])
+            return swipeActions
+        }
+        else { return nil }
+    }
+    
 }
