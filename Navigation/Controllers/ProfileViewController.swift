@@ -136,7 +136,17 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
             self.navigationController?.pushViewController(PhotosViewController(), animated: true)
-        } else { return }
+        } else {
+            let post = OpenPostViewController()
+            post.selectedAuthor = dataSource[indexPath.row - 1].author
+            post.selectedImage = dataSource[indexPath.row - 1].image
+            post.selectedDescription = dataSource[indexPath.row - 1].description
+            post.selectedLikes = dataSource[indexPath.row - 1].likes
+            post.selectedViews = dataSource[indexPath.row - 1].views + 1
+            dataSource[indexPath.row - 1].views += 1
+            self.tableView.reloadRows(at: [indexPath], with: .none)
+            self.navigationController?.pushViewController(post, animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
