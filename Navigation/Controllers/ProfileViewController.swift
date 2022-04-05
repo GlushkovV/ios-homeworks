@@ -24,8 +24,6 @@ final class ProfileViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     } ()
-
-    private var dataSource: [Post] = []
     
     private let tapGestureRecognizer = UITapGestureRecognizer()
     
@@ -40,7 +38,6 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
-        self.addDataSource()
         //self.hidingKeyboard()
         self.setupGesture()
     }
@@ -66,6 +63,7 @@ final class ProfileViewController: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
         navigationItem.backButtonTitle = "Назад"
+        self.tableView.reloadData()
     }
     
     private func setupView() {
@@ -85,19 +83,12 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
-    private func addDataSource() {
-        self.dataSource.append(.init(author: "Андрей Загородний", description: "Тогда и сейчас. Проблемы разные, решения не меняются...", image: "post1", likes: 8, views: 16))
-        self.dataSource.append(.init(author: "Лев Красильников", description: "Крепитесь люди, скоро лето...", image: "post2", likes: 2, views: 4))
-        self.dataSource.append(.init(author: "Сергей Судаков", description: "Коты замышляют...", image: "post3", likes: 4, views: 8))
-        self.dataSource.append(.init(author: "Алексей Кузнецов", description: "Крутые тапки за смешные бабки!", image: "post4", likes: 16, views: 32))
-    }
-    
 }
 
 extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.dataSource.count + 1
+        return dataSource.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -109,12 +100,13 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell", for: indexPath)
                 return cell
             }
-            let article = self.dataSource[indexPath.row - 1]
-            let viewModel = PostTableViewCell.ViewModel(author: article.author,
-                                                        image: article.image,
-                                                        description: article.description,
-                                                        likes: article.likes,
-                                                        views: article.views)
+            let viewModel = PostTableViewCell.ViewModel(author: dataSource[indexPath.row - 1].author,
+                                                        image: dataSource[indexPath.row - 1].image,
+                                                        description: dataSource[indexPath.row - 1].description,
+                                                        likes: dataSource[indexPath.row - 1].likes + (dataSource[indexPath.row - 1].liked ? 1 : 0),
+                                                        views: dataSource[indexPath.row - 1].views,
+                                                        liked: dataSource[indexPath.row - 1].liked,
+                                                        articleNumber: indexPath.row - 1)
             cell.setup(with: viewModel)
             return cell
         }
@@ -138,28 +130,39 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             self.navigationController?.pushViewController(PhotosViewController(), animated: true)
         } else {
             let post = OpenPostViewController()
-            post.selectedAuthor = dataSource[indexPath.row - 1].author
-            post.selectedImage = dataSource[indexPath.row - 1].image
-            post.selectedDescription = dataSource[indexPath.row - 1].description
-            post.selectedLikes = dataSource[indexPath.row - 1].likes
-            post.selectedViews = dataSource[indexPath.row - 1].views + 1
+            post.selectedArticleNumber = indexPath.row - 1
             dataSource[indexPath.row - 1].views += 1
             self.tableView.reloadRows(at: [indexPath], with: .none)
             self.navigationController?.pushViewController(post, animated: true)
         }
     }
-    
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+
+    /*func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         if indexPath.row != 0 {
             let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") {
                 (contextualAction, view, boolValue) in
-                self.dataSource.remove(at: indexPath.row - 1)
+                dataSource.remove(at: indexPath.row - 1)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
             }
             let swipeActions = UISwipeActionsConfiguration(actions: [deleteAction])
+            self.tableView.reloadData()
             return swipeActions
         }
         else { return nil }
+    }*/
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        if indexPath.row != 0 {
+            return .delete
+        }
+        return .none
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            dataSource.remove(at: indexPath.row - 1)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
     }
     
 }

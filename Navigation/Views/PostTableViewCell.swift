@@ -15,6 +15,8 @@ final class PostTableViewCell: UITableViewCell {
         let description: String
         var likes: Int
         var views: Int
+        var liked: Bool
+        var articleNumber: Int
     }
     
     private lazy var backView: UIView = {
@@ -77,6 +79,9 @@ final class PostTableViewCell: UITableViewCell {
         label.font = UIFont(name: "Sistem", size: 16)
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapLiked))
+        label.addGestureRecognizer(tap)
+        label.isUserInteractionEnabled = true
         return label
     } ()
 
@@ -88,6 +93,12 @@ final class PostTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     } ()
+    
+    private lazy var liked: Bool = false
+    
+    private lazy var likesCount: Int = 0
+    
+    private lazy var articleNumber: Int = 0
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -145,6 +156,19 @@ final class PostTableViewCell: UITableViewCell {
         self.descriptionLabel.text = viewModel.description
         self.likesLabel.text = "Likes: " + String(viewModel.likes)
         self.viewsLabel.text = "Views: " + String(viewModel.views)
+        self.liked = viewModel.liked
+        self.likesCount = viewModel.likes
+        self.articleNumber = viewModel.articleNumber
+    }
+    
+    @objc func tapLiked() {
+        if articleNumber < dataSource.count {
+            if authorLabel.text == dataSource[articleNumber].author && descriptionLabel.text == dataSource[articleNumber].description {
+                liked.toggle()
+                dataSource[articleNumber].liked = liked
+                likesLabel.text = "Likes: \(dataSource[articleNumber].likes + (dataSource[articleNumber].liked ? 1 : 0))"
+            }
+        }
     }
     
     override func awakeFromNib() {

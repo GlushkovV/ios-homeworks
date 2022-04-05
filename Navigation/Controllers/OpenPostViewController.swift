@@ -47,9 +47,7 @@ final class OpenPostViewController: UIViewController {
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textColor = .black
         label.textAlignment = NSTextAlignment.left
-        if let text = selectedAuthor {
-            label.text = text
-        }
+        label.text = dataSource[articleNumber].author
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     } ()
@@ -58,9 +56,7 @@ final class OpenPostViewController: UIViewController {
         let imageView = UIImageView()
         imageView.backgroundColor = .clear
         imageView.contentMode = .scaleAspectFit
-        if let image = selectedImage {
-            imageView.image = UIImage(named: image)
-        }
+        imageView.image = UIImage(named: dataSource[articleNumber].image)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     } ()
@@ -70,9 +66,7 @@ final class OpenPostViewController: UIViewController {
         label.numberOfLines = 0
         label.font = UIFont(name: "Sistem", size: 14)
         label.textColor = .systemGray
-        if let text = selectedDescription {
-            label.text = text
-        }
+        label.text = dataSource[articleNumber].description
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     } ()
@@ -82,9 +76,7 @@ final class OpenPostViewController: UIViewController {
         label.backgroundColor = .clear
         label.font = UIFont(name: "Sistem", size: 16)
         label.textColor = .black
-        if let likes = selectedLikes {
-            label.text = "Likes: " + String(likes)
-        }
+        label.text = "Likes: " + String(dataSource[articleNumber].likes + (dataSource[articleNumber].liked ? 1 : 0))
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isUserInteractionEnabled = true
         return label
@@ -95,25 +87,48 @@ final class OpenPostViewController: UIViewController {
         label.backgroundColor = .clear
         label.font = UIFont(name: "Sistem", size: 16)
         label.textColor = .black
-        if let views = selectedViews {
-            label.text = "Views: " + String(views)
-        }
+        label.text = "Views: " + String(dataSource[articleNumber].views)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     } ()
     
-    var selectedAuthor, selectedDescription, selectedImage: String?
-    var selectedLikes, selectedViews: Int?
+    private lazy var liked: Bool = {
+        return dataSource[articleNumber].liked
+    } ()
+
+    private lazy var articleNumber: Int = {
+        let article = selectedArticleNumber ?? 0
+        return article
+    } ()
+    
+    private let tapGestureRecognizer = UITapGestureRecognizer()
+    
+    var selectedArticleNumber: Int?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Запись"
         setupView()
+        setupGesture()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
+        //navigationController?.navigationBar.alpha = 0.9
+        //navigationController?.tabBarController?.tabBar.alpha = 0.9
+    }
+    
+    private func setupGesture() {
+        self.tapGestureRecognizer.addTarget(self, action: #selector(self.tapLiked(_ :)))
+        self.likesLabel.addGestureRecognizer(self.tapGestureRecognizer)
+    }
+    
+    @objc func tapLiked(_ gestureRecognizer: UITapGestureRecognizer) {
+        guard self.tapGestureRecognizer === gestureRecognizer else { return }
+        liked.toggle()
+        dataSource[articleNumber].liked = liked
+        likesLabel.text = "Likes: \(dataSource[articleNumber].likes + (dataSource[articleNumber].liked ? 1 : 0))"
     }
     
     private func setupView() {
