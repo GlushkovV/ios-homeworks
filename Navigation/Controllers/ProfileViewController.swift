@@ -11,8 +11,6 @@ final class ProfileViewController: UIViewController {
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
-        //tableView.rowHeight = UITableView.automaticDimension
-        //tableView.estimatedRowHeight = 44
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "DefaultCell")
@@ -38,7 +36,6 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
-        //self.hidingKeyboard()
         self.setupGesture()
     }
     
@@ -52,11 +49,6 @@ final class ProfileViewController: UIViewController {
         UIView.animate(withDuration: 0.5) {
             self.avatarView.alpha = 1
         }
-    }
-    
-    private func hidingKeyboard() {
-        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
-        view.addGestureRecognizer(tap)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -113,11 +105,6 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        /* var headerView = UIView()
-        if section == 0 {
-            headerView = ProfileHeaderView()
-        }
-        return headerView */
         return profileHeaderView
     }
     
@@ -136,20 +123,6 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             self.navigationController?.pushViewController(post, animated: true)
         }
     }
-
-    /*func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        if indexPath.row != 0 {
-            let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") {
-                (contextualAction, view, boolValue) in
-                dataSource.remove(at: indexPath.row - 1)
-                tableView.deleteRows(at: [indexPath], with: .automatic)
-            }
-            let swipeActions = UISwipeActionsConfiguration(actions: [deleteAction])
-            self.tableView.reloadData()
-            return swipeActions
-        }
-        else { return nil }
-    }*/
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         if indexPath.row != 0 {

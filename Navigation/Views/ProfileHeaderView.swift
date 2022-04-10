@@ -30,7 +30,6 @@ final class ProfileHeaderView: UIView {
     
     private lazy var statusLabel: UILabel = {
         let label = UILabel()
-        //label.backgroundColor = .lightGray
         label.font = .systemFont(ofSize: 14, weight: .regular)
         label.textColor = .gray
         label.text = "Статус"
@@ -43,7 +42,6 @@ final class ProfileHeaderView: UIView {
         button.setTitle("Изменить статус", for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
-        //button.clipsToBounds = true
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowOffset = CGSize(width: 4, height: 4)
         button.layer.shadowRadius = 4
@@ -59,10 +57,9 @@ final class ProfileHeaderView: UIView {
         textField.returnKeyType = .done
         textField.autocapitalizationType = .words
         textField.font = .systemFont(ofSize: 14, weight: .regular)
-        textField.textColor = .black //.systemGray2
-        textField.backgroundColor = .white //.systemGray4
+        textField.textColor = .black
+        textField.backgroundColor = .white
         textField.layer.cornerRadius = 10
-        //textField.borderStyle = .roundedRect
         textField.setLeftPaddingPoints(10)
         textField.textAlignment = .left
         textField.layer.borderWidth = 1
@@ -153,7 +150,7 @@ final class ProfileHeaderView: UIView {
             self.topSetStatusButtonOff = self.setStatusButton.topAnchor.constraint(equalTo: self.avatarImageView.bottomAnchor, constant: 16)
             NSLayoutConstraint.activate([self.topSetStatusButtonOff].compactMap({ $0 }))
         }
-        self.endEditing(true) //self.statusTextField.endEditing(true)
+        self.endEditing(true)
         self.didTapShowStatusButton(textFieldIsVisible: self.statusTextField.isHidden) { [weak self] in
             self?.statusTextField.isHidden.toggle()
         }

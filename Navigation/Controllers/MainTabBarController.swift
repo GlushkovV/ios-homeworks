@@ -18,7 +18,6 @@ final class MainTabBarController: UITabBarController {
     func setupTabBar() {
         let feedViewController = UINavigationController(rootViewController: FeedViewController())
         feedViewController.tabBarItem = UITabBarItem(title: "Лента", image: UIImage(systemName: "house"), tag: 0)
-        //let profileViewController = UINavigationController(rootViewController: ProfileViewController())
         let profileViewController = UINavigationController(rootViewController: LogInViewController())
         profileViewController.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(systemName: "person.fill"), tag: 0)
         

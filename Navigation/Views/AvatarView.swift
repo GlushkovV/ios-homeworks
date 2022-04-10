@@ -19,7 +19,6 @@ final class AvatarView: UIView {
     
     private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Photo"))
-        //imageView.layer.cornerRadius = 75
         imageView.clipsToBounds = true
         imageView.layer.borderWidth = 3
         imageView.layer.borderColor = UIColor.white.cgColor

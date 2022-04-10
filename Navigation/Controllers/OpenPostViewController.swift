@@ -34,7 +34,6 @@ final class OpenPostViewController: UIViewController {
     private lazy var stackViewLikesViews: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        //stackView.distribution = .fillEqually
         stackView.spacing = 10
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
@@ -115,8 +114,6 @@ final class OpenPostViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
-        //navigationController?.navigationBar.alpha = 0.9
-        //navigationController?.tabBarController?.tabBar.alpha = 0.9
     }
     
     private func setupGesture() {

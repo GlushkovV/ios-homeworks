@@ -157,7 +157,6 @@ final class LogInViewController: UIViewController {
             logoImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             logoImageView.heightAnchor.constraint(equalToConstant: 100),
             logoImageView.widthAnchor.constraint(equalTo: logoImageView.heightAnchor, multiplier: 1.0),
-            //logoImageView.widthAnchor.constraint(equalToConstant: 100),
             
             loginPasswordStackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             loginPasswordStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -175,15 +174,6 @@ final class LogInViewController: UIViewController {
         ])
     }
          
-    /*
-    @objc func buttonClicked() {
-        let profileViewController = ProfileViewController()
-        if self.loginTextField.text != "" && self.passwordTextField.text != "" {
-            navigationController?.pushViewController(profileViewController, animated: true)
-            //self.navigationController?.pushViewController(ProfileViewController(), animated: true)
-        }
-    }*/
-    
     @objc func buttonClicked() {
         if self.loginTextField.text == AuthorizationData().defaultLogin && self.passwordTextField.text == AuthorizationData().defaultPassword {
             invalidLabel.isHidden = true
@@ -207,10 +197,12 @@ final class LogInViewController: UIViewController {
             guard let password = passwordTextField.text else { return }
             if password.count > 0 && password.count < 8 {
                 invalidLabel.text = AuthorizationData().invalidPassword
+                invalidLabel.shake()
                 invalidLabel.isHidden = false
             } else {
                 if password.count >= 8 {
                     invalidLabel.text = AuthorizationData().invalidLogPass
+                    invalidLabel.shake()
                     invalidLabel.isHidden = false
                     alertInvalidAuthorization()
                 } else {
@@ -220,6 +212,7 @@ final class LogInViewController: UIViewController {
         } else {
             if login != "" {
                 invalidLabel.text = AuthorizationData().invalidLogin
+                invalidLabel.shake()
                 invalidLabel.isHidden = false
             } else {
                 invalidLabel.isHidden = true
