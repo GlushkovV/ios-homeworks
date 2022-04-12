@@ -67,7 +67,6 @@ final class ProfileHeaderView: UIView {
         textField.returnKeyType = .next
         textField.keyboardType = .default
         textField.clearButtonMode = .always
-        textField.alpha = 0
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -117,23 +116,14 @@ final class ProfileHeaderView: UIView {
     }
     
     @objc private func didTapSetStatusButton() {
-        if statusTextField.alpha == 0 {
-            UIView.animate(withDuration: 0.3){
-                self.statusTextField.alpha = 1
-            }
+        if self.statusTextField.text != "" {
+            self.statusLabel.text = self.statusTextField.text
+            self.statusTextField.text = .none
+            self.statusLabel.textColor = .black
         } else {
-            UIView.animate(withDuration: 0.3){
-                self.statusTextField.alpha = 0
-            }
-            if self.statusTextField.text != "" {
-                self.statusLabel.text = self.statusTextField.text
-                self.statusTextField.text = .none
-                self.statusLabel.textColor = .black
-            } else {
-                self.statusLabel.shake()
-                self.statusLabel.textColor = .gray
-                self.statusLabel.text = "Статус"
-            }
+            self.statusLabel.shake()
+            self.statusLabel.textColor = .gray
+            self.statusLabel.text = "Статус"
         }
         self.endEditing(true)
     }
